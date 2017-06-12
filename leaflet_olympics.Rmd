@@ -1,0 +1,44 @@
+---
+title: "Leaflet: An Olympian Example"
+author: "Marc Boulet"
+date: "2017-06-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Olympic Data 
+#### (source from https://www.mapsofworld.com/world-olympic-map.htm)
+
+```{r, message=FALSE}
+library(readr)
+olympics <- read_csv("olympics.csv")
+head(olympics)
+```
+
+### Olympic Map
+
+**This map displays all Olympic host cities since 1896. I live in one of these locations. Can you find it?**
+
+```{r, message=FALSE}
+library(leaflet)
+
+# load custom Olympic marker
+olympicIcon <- makeIcon(
+  iconUrl = "Olympic-logo.png",
+  iconWidth = 50, iconHeight = 25,
+  iconAnchorX = 0, iconAnchorY = 0)
+
+# generate popup content from olympics data frame
+content <- paste(sep = "<br/>",olympics$city,olympics$season,olympics$years)
+
+# generate map
+olympics %>%
+        leaflet(width = "100%") %>%
+        addTiles() %>%
+        addMarkers(icon=olympicIcon, popup = content, clusterOptions = markerClusterOptions())
+
+```
+
