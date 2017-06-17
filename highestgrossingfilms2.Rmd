@@ -1,0 +1,29 @@
+---
+title: "The Highest Grossing Films of All Time"
+author: "Marc Boulet"
+date: "6/17/2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Highest Grossing Films of All Time
+
+This plot is an analysis of the 50 highest-grossing films of all time, not adjusted for inflation. The data is from the following source: https://en.wikipedia.org/wiki/List_of_highest-grossing_films, and stored in highgrossfilms.csv, which is loaded below.
+
+As we can see, there is a heavy bias towards recent films, with 28 of the films having been released since 2010. There are no films made before 1993 in the top 50. This is directly due to effects of inflation, as ticket prices are significantly higher now than they were in the past. When adjusted for inflation, the film Gone With the Wind, released in 1939, would be considered the highest-grossing film of all time, with Avatar in second place.
+
+## Plotly graph
+
+```{r message=FALSE}
+library(readr)
+library(plotly)
+library(ggplot2)
+highgrossfilms <- read_csv("highgrossfilms.csv", 
+    col_types = cols(`WorldwideGross` = col_number()))
+plot_ly(highgrossfilms, x = ~Year, y = ~WorldwideGross, type = 'scatter', mode = 'markers',
+        size = ~WorldwideGross, color = ~Year, colors = "Set1", hoverinfo = 'text', 
+        text = ~paste(Title, '<br> Rank: ', Rank, '<br>Gross: $', WorldwideGross))
+```
